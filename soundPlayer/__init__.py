@@ -1,4 +1,4 @@
-from .soundPlayer import *
+from . import *
 
 __copyright__    = 'Copyright (C) 2020 Hiroki Fujii'
 __version__      = '0.0.1'
