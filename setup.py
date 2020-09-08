@@ -35,7 +35,8 @@ setup(
     author=author,
     author_email=author_email,
 
-    packages=[package_name, package_name + ".bass"],
+    packages=[package_name, package_name + "/bass"],
+    include_package_data=True,
 
     url=url,
 
