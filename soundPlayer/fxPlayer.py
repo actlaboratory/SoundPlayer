@@ -34,7 +34,6 @@ class _fxPlayerObject():
     def setDevice(self, device, change=True):
         """ インデックス、または定数から再生デバイスをセット(int インデックス, 変更扱い=True) => None """
         if device < len(bassController.getDeviceList()) and device > 0: self.__device = device
-        elif device == PLAYER_NO_SPEAKER: self.__device = PLAYER_NO_SPEAKER
         elif device == PLAYER_DEFAULT_SPEAKER and len(bassController.getDeviceList()) > 1: self.__device = PLAYER_DEFAULT_SPEAKER
         else: return False
         bassController.changeDevice(self.__id)
