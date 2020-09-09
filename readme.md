@@ -14,7 +14,7 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.3.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.4.zip
 
 
 ## 変更履歴
