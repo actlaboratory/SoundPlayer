@@ -14,10 +14,13 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.4.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.5.zip
 
 
 ## 変更履歴
+
+- Version 0.0.5 2020.09.12
+	- pyinstaller4.0以降のためのhookを追加
 
 - Version 0.0.1 2020.09.02
 	- 初回リリース
