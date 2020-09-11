@@ -35,7 +35,7 @@ setup(
     author=author,
     author_email=author_email,
 
-    packages=[package_name, package_name + "/bass"],
+    packages=[package_name, package_name + "/bass", package_name, package_name + "/__pyinstaller"],
     include_package_data=True,
 
     url=url,
