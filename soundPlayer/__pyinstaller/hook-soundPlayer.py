@@ -1,3 +1,3 @@
-from PyInstaller.utils.hooks import collect_dynamic_libs
+import os
 
-binaries = collect_dynamic_libs('soundPlayer')
+binaries = [(os.path.dirname(__file__) + "/../bass/*.dll", "soundPlayer/bass")]
