@@ -346,6 +346,7 @@ class bassThread(threading.Thread):
                 if _playerList[id] == None: continue
                 
                 # 再生監視
+                if id >= len(self.__handle): continue
                 if self.__defaultDevice[id] and (self.__device[id] != getDefaultDevice()):
                     self.__changeDevice(id, True)
                 a = pybass.BASS_ChannelIsActive(self.__handle[id])
