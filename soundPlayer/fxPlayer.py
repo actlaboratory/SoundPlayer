@@ -5,12 +5,20 @@ from .constants import *
 class _fxPlayerObject():
     def __init__(self, source, repeat=True, device=PLAYER_DEFAULT_SPEAKER, volume=100, system=False):
         """ init（音源, リピート=True, 再生デバイス=デフォルト, 音量=100） """
-        self.__device = device
+        if type(device) == str:
+            try:
+                self.__device = getDeviceList().index(device)
+            except ValueError as e:
+                raise DeviceNotFoundError()
+        elif type(device) == int:
+            self.__device = device
+        else:
+            raise DeviceNotFoundError()
         self.__source = source
         self.__volume = volume
         self.__id = bassController.connectPlayer(self)
         self.__isDeleted = False
-        self.setDevice(device)
+        if not self.setDevice(device): raise DeviceNotFoundError()
         bassController.setRepeat(self.__id, repeat)
         bassController.setAutoChangeDevice(self.__id, False)
         bassController.setFile(self.__id)
@@ -33,10 +41,18 @@ class _fxPlayerObject():
 
     def setDevice(self, device, change=True):
         """ インデックス、または定数から再生デバイスをセット(int インデックス, 変更扱い=True) => None """
-        if device < len(bassController.getDeviceList()) and device > 0: self.__device = device
-        elif device == PLAYER_DEFAULT_SPEAKER and len(bassController.getDeviceList()) > 1: self.__device = PLAYER_DEFAULT_SPEAKER
-        else: return False
-        bassController.changeDevice(self.__id)
+        if type(device) == str:
+            try:
+                self.__device = getDeviceList().index(device)
+            except ValueError as e:
+                return False
+        elif type(device) == int:
+            if device < len(bassController.getDeviceList()) and device > 0: self.__device = device
+            elif device == PLAYER_DEFAULT_SPEAKER and len(bassController.getDeviceList()) > 1: self.__device = PLAYER_DEFAULT_SPEAKER
+            else: return False
+        else:
+            return False
+        return bassController.changeDevice(self.__id)
     
     def __autoStopper(self):
         """ 単発再生用自動停止 （スレッド呼び出し必須）"""
@@ -65,12 +81,17 @@ class _fxPlayerObject():
             self.__isDeleted = True
             bassController.exitPlayer(self.__id)
 
+class DeviceNotFoundError(Exception): pass
+
 def playFx(source, device=PLAYER_DEFAULT_SPEAKER, volume=100):
     """
     効果音再生（音源, 再生デバイス=デフォルト, 音量=100） => bool
     60秒以内の効果音ファイルを１度再生する。
     """
-    p = _fxPlayerObject(source, False, device, volume, True)
+    try:
+        p = _fxPlayerObject(source, False, device, volume, True)
+    except DeviceNotFoundError as e:
+        return False
     ret = p.play()
     if ret: return True
     else:
