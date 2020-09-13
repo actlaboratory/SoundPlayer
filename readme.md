@@ -14,12 +14,16 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.6.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.7.zip
 
 
 ## 変更履歴
 
-- Version 0.0.6 2020.9.13
+- Version 0.0.7 2020.09.13
+	- fxPlayerにて、デバイス名でも出力先が指定できるように修正
+	- 各playerオブジェクトに対し、、デバイス一覧取得が可能になった。
+
+- Version 0.0.6 2020.09.13
 	- 存在しないプレイヤーの制御を試みることでエラーとなる不具合を修正
 
 - Version 0.0.5 2020.09.12
