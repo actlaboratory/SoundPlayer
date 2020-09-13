@@ -14,10 +14,13 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.5.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.6.zip
 
 
 ## 変更履歴
+
+- Version 0.0.6 2020.9.13
+	- 存在しないプレイヤーの制御を試みることでエラーとなる不具合を修正
 
 - Version 0.0.5 2020.09.12
 	- pyinstaller4.0以降のためのhookを追加
