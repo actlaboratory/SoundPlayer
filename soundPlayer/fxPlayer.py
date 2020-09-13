@@ -27,6 +27,10 @@ class _fxPlayerObject():
             auto = threading.Thread(target=self.__autoStopper)
             auto.start()
 
+    def getDeviceList(self):
+        """ デバイス一覧取得 => list """
+        return getDeviceList()
+
     def getConfig(self, config):
         """ 設定読み出し(設定読み出し定数) =>　mixed """
         if config == PLAYER_CONFIG_DEVICE: return self.__device
