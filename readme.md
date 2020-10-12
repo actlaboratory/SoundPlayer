@@ -14,10 +14,14 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.7.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.8.zip
 
 
 ## 変更履歴
+
+- Version 0.08 2020.10.13
+	- playerの音量差分調整が適切なリターンを返すように修正
+	- ソフトウェアが動作を停止する問題に対処
 
 - Version 0.0.7 2020.09.13
 	- fxPlayerにて、デバイス名でも出力先が指定できるように修正

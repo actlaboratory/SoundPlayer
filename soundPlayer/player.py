@@ -161,9 +161,7 @@ class player():
     def setVolumeByDiff(self, vol):
         """ 音量増減値設定（int +-差分） => bool """
         val = self.__volume + vol
-        if val > 100: return self.setVolume(100)
-        elif val < 0: return self.setVolume(0)
-        else: return self.setVolume(val)
+        return self.setVolume(val)
 
     def getPosition(self):
         """ 再生位置取得 => int 秒数 or -1"""

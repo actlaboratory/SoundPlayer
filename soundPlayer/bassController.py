@@ -177,7 +177,7 @@ def _send(playerID, status, value=None, returnValue=False, falseToInt=False):
         if value != None: _memory[playerID][M_VALUE] = value
         _memory[playerID][M_STATUS] = status
         while True:
-            time.sleep(0.02)
+            time.sleep(0)
             if _memory[playerID][M_STATUS] == PLAYERSTATUS_STATUS_OK:
                 if returnValue: return _memory[playerID][M_VALUE]
                 else: return True
@@ -265,7 +265,7 @@ class bassThread(threading.Thread):
     
     def run(self):
         while True:
-            time.sleep(0.02)
+            time.sleep(0)
             # スレッドの自動終了
             threadEnd = False
             for o in _playerList:
@@ -361,7 +361,7 @@ class bassThread(threading.Thread):
                     if pybass.BASS_ChannelGetPosition(self.__handle[id], pybass.BASS_POS_BYTE) == pybass.BASS_ChannelGetLength(self.__handle[id], pybass.BASS_POS_BYTE) != -1:
                         if self.__repeat[id]: self.play(id)
                         else:
-                            self.stop(id)
+                            #self.stop(id)
                             self.__eofFlag[id] = True
         return
 
