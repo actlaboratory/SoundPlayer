@@ -14,10 +14,13 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.0.9.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.1.0.zip
 
 
 ## 変更履歴
+
+- Version 0.1.0 2020.11.14
+	- wma、flac、opusへの対応
 
 - Version 0.0.9 2020.10.24
 	- 動作の軽量化
