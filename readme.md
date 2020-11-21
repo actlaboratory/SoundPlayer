@@ -14,10 +14,15 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.1.0.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.2.0.zip
 
 
 ## 変更履歴
+
+- Version 0.2.0 2020.11.21
+	- デバイス異常検知の制度を改善
+	- 今後、デバイスエラー検知後、変更先のデバイスでエラーが継続する場合は STATUS_PAUSE を返します。
+	- デバイスの正常性を確認する isDeviceOk() を追加
 
 - Version 0.1.0 2020.11.14
 	- wma、flac、opusへの対応

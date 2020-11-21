@@ -167,6 +167,10 @@ def setPosition(playerID, second):
     """ 再生位置設定要求（playerID, int 秒数） => bool """
     return _send(playerID, PLAYER_SEND_SETPOSITION, second)
 
+def isDeviceOk(playerID):
+    """ デバイスは正常か（playerID） => bool """
+    return _send(playerID, PLAYER_SEND_IS_DEVICEOK, None, True)
+
 def getLength(playerID):
     """ 合計時間取得要求（playerID）=> int 秒数 """
     return _send(playerID, PLAYER_SEND_GETLENGTH, None, True, True)
@@ -205,6 +209,7 @@ class bassThread(threading.Thread):
         self.__defaultDevice = []
         self.__autoChange = []
         self.__positionTmp = []
+        self.__lengthTmp = []
         self.__eofFlag = []
         self.__repeat = []
         self.__sourceType = []
@@ -224,7 +229,8 @@ class bassThread(threading.Thread):
         """新しいプレイヤーをセット"""
         if id == len(_playerList) - 1:
             self.__autoChange.append(False)
-            self.__positionTmp.append(-1)
+            self.__positionTmp.append(None)
+            self.__lengthTmp.append(None)
             self.__eofFlag.append(False)
             self.__repeat.append(False)
             self.__sourceType.append(PLAYER_SOURCETYPE_NUL)
@@ -236,7 +242,8 @@ class bassThread(threading.Thread):
             self.__defaultDevice.append(False)
         else:
             self.__autoChange[id] = False
-            self.__positionTmp[id] = -1
+            self.__positionTmp[id] = None
+            self.__lengthTmp[id] = None
             self.__eofFlag[id] = False
             self.__repeat[id] = False
             self.__sourceType[id] = PLAYER_SOURCETYPE_NUL
@@ -252,6 +259,7 @@ class bassThread(threading.Thread):
         self.stop(id)
         self.__autoChange[id] = None
         self.__positionTmp[id] = None
+        self.__lengthTmp[id] = None
         self.__eofFlag[id] = None
         self.__repeat[id] = None
         self.__sourceType[id] = None
@@ -326,7 +334,7 @@ class bassThread(threading.Thread):
                 elif s == PLAYER_SEND_GETLENGTH:
                     if self.getLength(id): sRet = 1
                 elif s == PLAYER_SEND_STOP:
-                    if self.stop(id): sRet = 1
+                    if self.stop(id, True): sRet = 1
                 # 設定
                 elif s == PLAYER_SEND_SETNETTIMEOUT:
                     pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, _memory[id][M_VALUE])
@@ -341,6 +349,9 @@ class bassThread(threading.Thread):
                     if pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY, _memory[id][M_VALUE]): sRet = 1
                 elif s == PLAYER_SEND_AUTOCHANGE:
                     self.__autoChange[id] = _memory[id][M_VALUE]
+                    sRet = 1
+                elif s == PLAYER_SEND_IS_DEVICEOK:
+                    self.isDeviceOk(id)
                     sRet = 1
                 else: sRet = 0
                 
@@ -362,7 +373,8 @@ class bassThread(threading.Thread):
                         if pybass.BASS_ErrorGetCode() != pybass.BASS_ERROR_HANDLE: #ハンドルが姿を消しているのでデバイスエラー
                             self.stop(id)
                             self.__eofFlag[id] = True
-                elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] > self.PLAYINGF_STOP and self.__sourceType[id] == PLAYER_SOURCETYPE_FILE:
+                elif self.__device[id] == 0: self.reStartPlay(id)
+                elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] > self.PLAYINGF_STOP and self.__sourceType[id] == PLAYER_SOURCETYPE_FILE and self.__playingFlag == None:
                     if pybass.BASS_ChannelGetPosition(self.__handle[id], pybass.BASS_POS_BYTE) == pybass.BASS_ChannelGetLength(self.__handle[id], pybass.BASS_POS_BYTE) != -1:
                         if self.__repeat[id]: self.play(id)
                         else:
@@ -387,6 +399,7 @@ class bassThread(threading.Thread):
             elif pybass.BASS_Init(device, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0):
                 self.__device[id] = device
                 ret = True
+
         if not ret:
             self.__device[id] = 0
         return ret
@@ -408,7 +421,7 @@ class bassThread(threading.Thread):
         if forChannel:
             if self.bassInit(id):
                 ret = True
-                if self.__playingFlag[id] > self.PLAYINGF_STOP: self.reStartPlay(id)
+                if self.__playingFlag[id] > self.PLAYINGF_STOP or self.__positionTmp[id] != None: self.reStartPlay(id)
             else:
                 ret = False
         else:
@@ -431,10 +444,13 @@ class bassThread(threading.Thread):
         return pybass.BASS_Free()
 
     def backup(self):
-        """ 再生位置を保存 """
+        """ 再生位置保存 """
         for i in range(len(_playerList)):
+            if self.__positionTmp[i] != None: continue
             posBTmp = pybass.BASS_ChannelGetPosition(self.__handle[i], pybass.BASS_POS_BYTE)
             if posBTmp != -1: self.__positionTmp[i] = pybass.BASS_ChannelBytes2Seconds(self.__handle[i], posBTmp)
+            lenBTmp = pybass.BASS_ChannelGetLength(self.__handle[i], pybass.BASS_POS_BYTE)
+            if lenBTmp != -1: self.__lengthTmp[i] = pybass.BASS_ChannelBytes2Seconds(self.__handle[i], lenBTmp)
         
     def reStartPlay(self, id):
         """ 再生復旧（id）"""
@@ -443,7 +459,7 @@ class bassThread(threading.Thread):
         if self.__playingFlag[id] == self.PLAYINGF_PAUSE: pause = True
         if _playerList[id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_PATH: self.createHandle(id)
         elif _playerList[id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_URL: self.createHandleFromURL(id)
-        if self.__positionTmp[id] != -1:
+        if self.__positionTmp[id] != None:
             posB = pybass.BASS_ChannelSeconds2Bytes(self.__handle[id], self.__positionTmp[id])
             pybass.BASS_ChannelSetPosition(self.__handle[id], posB, pybass.BASS_POS_BYTE)
             if not pause:
@@ -452,9 +468,9 @@ class bassThread(threading.Thread):
     def createHandle(self, id):
         """ ハンドル作成（id） => bool """
         pybass.BASS_SetDevice(self.__device[id])
-        self.stop(id)
+        if self.__positionTmp[id] == None: self.stop(id)
         self.__eofFlag[id] = False
-        self.__playingFlag[id] = self.PLAYINGF_STOP
+        #self.__playingFlag[id] = self.PLAYINGF_STOP
         source = _playerList[id].getConfig(PLAYER_CONFIG_SOURCE)
         handle = pybass.BASS_StreamCreateFile(False,source, 0, 0, pybass.BASS_UNICODE | pybass.BASS_STREAM_PRESCAN | pybass.BASS_STREAM_DECODE)
         reverseHandle = bassFx.BASS_FX_ReverseCreate(handle,0.3,bassFx.BASS_FX_FREESOURCE | pybass.BASS_STREAM_DECODE)
@@ -500,8 +516,12 @@ class bassThread(threading.Thread):
     def play(self, id):
         """ 再生（id）=> bool  """
         ret = pybass.BASS_ChannelPlay(self.__handle[id], False)
-        if ret: self.__playingFlag[id] = self.PLAYINGF_PLAY
+        if ret:
+            self.__playingFlag[id] = self.PLAYINGF_PLAY
+            self.__positionTmp[id] = None
+            self.__lengthTmp[id] = None
         else:
+            if self.__positionTmp[id] != None: return ret
             if pybass.BASS_ErrorGetCode() == pybass.BASS_ERROR_START: self.__device[id] = 0
             elif self.__sourceType[id] != PLAYER_SOURCETYPE_STREAM: self.__playingFlag[id] = self.PLAYINGF_STOP
         return ret
@@ -513,12 +533,15 @@ class bassThread(threading.Thread):
         if ret: self.__playingFlag[id] = self.PLAYINGF_PAUSE
         return ret
 
-    def stop(self, id):
-        """ 停止（id） => bool """
+    def stop(self, id, manual=False):
+        """ 停止（id, 手動=False） => bool """
         pybass.BASS_StreamFree(self.__handle[id])
         self.__reset(id)
         self.__playingFlag[id] = self.PLAYINGF_STOP
         self.__eofFlag[id] = False
+        if manual:
+            self.__positionTmp[id] = None
+            self.__lengthTmp[id] = None
         return True
 
     def getStatus(self, id):
@@ -533,6 +556,7 @@ class bassThread(threading.Thread):
         elif pybass.BASS_ChannelIsActive(self.__handle[id]) == pybass.BASS_ACTIVE_PAUSED or (self.__handle[id] and pybass.BASS_ChannelIsActive(self.__handle[id]) == pybass.BASS_ACTIVE_STOPPED):
             _memory[id][M_VALUE] = PLAYER_STATUS_PAUSED
         elif self.__playingFlag[id] > self.PLAYINGF_STOP: _memory[id][M_VALUE] = PLAYER_STATUS_LOADING
+        elif self.__positionTmp[id] != None: _memory[id][M_VALUE] = PLAYER_STATUS_PAUSED
         else: _memory[id][M_VALUE] = PLAYER_STATUS_STOPPED
         return True
 
@@ -562,12 +586,15 @@ class bassThread(threading.Thread):
 
     def getPosition(self, id):
         """  再生位置秒数取得（id） => bool (value)"""
-        byte = pybass.BASS_ChannelGetPosition(self.__handle[id], pybass.BASS_POS_BYTE)
-        if byte != -1:
-            sec = pybass.BASS_ChannelBytes2Seconds(self.__handle[id], byte)
-            _memory[id][M_VALUE] = sec
-            return True
-        else: return False
+        if self.__positionTmp[id] == None:
+            byte = pybass.BASS_ChannelGetPosition(self.__handle[id], pybass.BASS_POS_BYTE)
+            if byte != -1:
+                sec = pybass.BASS_ChannelBytes2Seconds(self.__handle[id], byte)
+            else: return False
+        else:
+            sec = self.__positionTmp[id]
+        _memory[id][M_VALUE] = sec
+        return True
 
     def setPosition(self, id):
         """ 秒数で再生位置を設定（id） => bool """
@@ -579,9 +606,15 @@ class bassThread(threading.Thread):
 
     def getLength(self, id):
         """  合計時間秒数取得（id）=> bool (value)"""
-        byte = pybass.BASS_ChannelGetLength(self.__handle[id], pybass.BASS_POS_BYTE)
-        if byte != -1:
-            sec = pybass.BASS_ChannelBytes2Seconds(self.__handle[id], byte)
-            _memory[id][M_VALUE] = sec
-        else: _memory[id][M_VALUE] = -1
+        if self.__lengthTmp[id] == None:
+            byte = pybass.BASS_ChannelGetLength(self.__handle[id], pybass.BASS_POS_BYTE)
+            if byte != -1:
+                sec = pybass.BASS_ChannelBytes2Seconds(self.__handle[id], byte)
+                _memory[id][M_VALUE] = sec
+            else: _memory[id][M_VALUE] =1
+        else: _memory[id][M_VALUE] = self.__lengthTmp[id]
         return True
+
+    def isDeviceOk(self, id):
+        if self.__positionTmp[id] == None: _memory[id][M_VALUE] = True
+        else: _memory[id][M_VALUE] = False

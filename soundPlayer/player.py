@@ -93,6 +93,10 @@ class player():
         elif re.search("^https?://.+\..+", self.__source) != None: return bassController.setURL(self.__id)
         else: return False
 
+    def isDeviceOk(self):
+        """ 現在のデバイスは正常か => bool"""
+        return bassController.isDeviceOk(self.__id)
+    
     def play(self):
         """再生 => bool"""
         return bassController.play(self.__id)
