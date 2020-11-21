@@ -59,8 +59,7 @@ def getDeviceList():
         if p.flags and pybass.BASS_DEVICE_ENABLED: newList.append(p.name.decode("shift-jis"))
         else: newList.append(None)
         index += 1
-    for i in range(len(_deviceList), len(newList)):
-        _deviceList.append(newList[i])
+    _deviceList = newList
     return _deviceList
 getDeviceList()
 

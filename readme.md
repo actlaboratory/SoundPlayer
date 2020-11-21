@@ -14,10 +14,13 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.2.0.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.2.1.zip
 
 
 ## 変更履歴
+
+- Version 0.2.1 2020.11.22
+	- デバイス一覧取得の処理を改善
 
 - Version 0.2.0 2020.11.21
 	- デバイス異常検知の制度を改善
