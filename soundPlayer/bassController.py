@@ -373,7 +373,7 @@ class bassThread(threading.Thread):
                             self.stop(id)
                             self.__eofFlag[id] = True
                 elif self.__device[id] == 0: self.reStartPlay(id)
-                elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] > self.PLAYINGF_STOP and self.__sourceType[id] == PLAYER_SOURCETYPE_FILE and self.__playingFlag == None:
+                elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] > self.PLAYINGF_STOP and self.__sourceType[id] == PLAYER_SOURCETYPE_FILE and self.__positionTmp[id] == None:
                     if pybass.BASS_ChannelGetPosition(self.__handle[id], pybass.BASS_POS_BYTE) == pybass.BASS_ChannelGetLength(self.__handle[id], pybass.BASS_POS_BYTE) != -1:
                         if self.__repeat[id]: self.play(id)
                         else:
