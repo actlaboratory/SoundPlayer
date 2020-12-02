@@ -365,7 +365,9 @@ class bassThread(threading.Thread):
                 if self.__defaultDevice[id] and (self.__device[id] != getDefaultDevice()):
                     self.__changeDevice(id, True)
                 a = pybass.BASS_ChannelIsActive(self.__handle[id])
-                if a == pybass.BASS_ACTIVE_PAUSED_DEVICE: 
+                if a == pybass.BASS_ACTIVE_PLAYING: 
+                    self.__positionTmp[id] = None
+                elif a == pybass.BASS_ACTIVE_PAUSED_DEVICE: 
                     self.__changeDevice(id)
                 elif a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] == self.PLAYINGF_PLAY and self.__sourceType[id] == PLAYER_SOURCETYPE_STREAM):
                     if not self.play(id):

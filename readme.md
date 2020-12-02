@@ -14,10 +14,13 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.2.2.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.2.3.zip
 
 
 ## 変更履歴
+
+- Version 0.2.3 2020.12.2
+	- デバイスエラー復帰時にステータスが戻らないことがある問題を修正
 
 - Version 0.2.2 2020.11.22
 	- EOFを検知できない問題に対処
