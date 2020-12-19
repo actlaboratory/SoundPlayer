@@ -197,6 +197,8 @@ class bassThread(threading.Thread):
         pybass.BASS_PluginLoad(b"basswma.dll", 0)
         pybass.BASS_PluginLoad(b"bassflac.dll", 0)
         pybass.BASS_PluginLoad(b"bassopus.dll", 0)
+        pybass.BASS_PluginLoad(b"bassalac.dll", 0)
+        pybass.BASS_PluginLoad(b"basswv.dll", 0)
 
         pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY,10)
         pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_BUFFER, 200000)

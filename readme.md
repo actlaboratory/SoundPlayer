@@ -14,10 +14,14 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.2.3.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.2.4.zip
 
 
 ## 変更履歴
+
+- Version 0.2.4 2020.12.19
+	- Appleロスレスに対応
+	- WavPackに対応
 
 - Version 0.2.3 2020.12.2
 	- デバイスエラー復帰時にステータスが戻らないことがある問題を修正
