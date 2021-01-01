@@ -489,7 +489,10 @@ class bassThread(threading.Thread):
             self.__sourceType[id] = PLAYER_SOURCETYPE_FILE
             self.__setChannelConfig(id)
             return True
-        else: return False
+        else:
+            if pybass.BASS_StreamCreateFile(False, os.path.dirname(os.path.abspath(__file__)) + "\\bass\\file".replace("\\", "\\\\"), 0, 0, pybass.BASS_UNICODE | pybass.BASS_STREAM_PRESCAN | pybass.BASS_STREAM_DECODE):
+                self.stop(id)
+            return False
 
     def createHandleFromURL(self, id):
         """ URLからハンドル作成（id） => bool """
@@ -507,7 +510,10 @@ class bassThread(threading.Thread):
             else: self.__sourceType[id] = PLAYER_SOURCETYPE_FILE
             self.__setChannelConfig(id)
             return True
-        else: return False
+        else:
+            if pybass.BASS_StreamCreateFile(False, os.path.dirname(os.path.abspath(__file__)) + "\\bass\\file".replace("\\", "\\\\"), 0, 0, pybass.BASS_UNICODE | pybass.BASS_STREAM_PRESCAN | pybass.BASS_STREAM_DECODE):
+                self.stop(id)
+            return False
 
     def __setChannelConfig(self, id):
         """ チャネル固有設定適用 """
@@ -614,7 +620,7 @@ class bassThread(threading.Thread):
             if byte != -1:
                 sec = pybass.BASS_ChannelBytes2Seconds(self.__handle[id], byte)
                 _memory[id][M_VALUE] = sec
-            else: _memory[id][M_VALUE] =1
+            else: _memory[id][M_VALUE] =-1
         else: _memory[id][M_VALUE] = self.__lengthTmp[id]
         return True
 

@@ -14,10 +14,14 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.2.4.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.3.0.zip
 
 
 ## 変更履歴
+
+- Version 0.3.0 2021.01.02
+	- ハンドルが生成できない理由がファイル要因の場合、playerが停止状態となるように改善
+	- ストリーミングの長さに1を返していた問題に対処
 
 - Version 0.2.4 2020.12.19
 	- Appleロスレスに対応

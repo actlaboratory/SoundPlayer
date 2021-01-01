@@ -35,7 +35,7 @@ class player():
         if config == PLAYER_CONFIG_SOURCE: return self.__source
         if config == PLAYER_CONFIG_SOURCETYPE:
             if os.path.isfile(self.__source): return PLAYER_SOURCETYPE_PATH
-            if re.search("https?://.+\..+", self.__source) != None: return PLAYER_SOURCETYPE_URL
+            if re.search("^https?://.+\..+/.*$", self.__source) != None: return PLAYER_SOURCETYPE_URL
             self.__source = None
             return PLAYER_SOURCETYPE_NUL
         if config == PLAYER_CONFIG_SPEED: return self.__speed
@@ -90,7 +90,7 @@ class player():
     def __sendSource(self):
         """bassにファイルを送信 => bool"""
         if os.path.isfile(self.__source): return bassController.setFile(self.__id)
-        elif re.search("^https?://.+\..+", self.__source) != None: return bassController.setURL(self.__id)
+        elif re.search("^https?://.+\..+/.*$", self.__source) != None: return bassController.setURL(self.__id)
         else: return False
 
     def isDeviceOk(self):
