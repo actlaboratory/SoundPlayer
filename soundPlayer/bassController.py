@@ -352,8 +352,8 @@ class bassThread(threading.Thread):
                     self.__autoChange[id] = _memory[id][M_VALUE]
                     sRet = 1
                 elif s == PLAYER_SEND_IS_DEVICEOK:
-                    self.isDeviceOk(id)
-                    sRet = 1
+                    if self.isDeviceOk(id):
+                        sRet = 1
                 else: sRet = 0
                 
                 if sRet == 1: _memory[id][M_STATUS] = PLAYERSTATUS_STATUS_OK
@@ -625,6 +625,4 @@ class bassThread(threading.Thread):
         return True
 
     def isDeviceOk(self, id):
-        h = pybass.BASS_StreamCreateFile(False, os.path.dirname(os.path.abspath(__file__)) + "\\bass\\file".replace("\\", "\\\\"), 0, 0, pybass.BASS_UNICODE | pybass.BASS_STREAM_PRESCAN | pybass.BASS_STREAM_DECODE)
-        if h: return True
-        else: return False
+        return pybass.BASS_SetDevice(self.__device[id])
