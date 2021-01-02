@@ -203,7 +203,7 @@ class bassThread(threading.Thread):
         pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY,10)
         pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_BUFFER, 200000)
         pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_PREBUF, 1)
-        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, 10000)
+        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, 5000)
         pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, 10000)
 
         # 初期化
@@ -625,6 +625,6 @@ class bassThread(threading.Thread):
         return True
 
     def isDeviceOk(self, id):
-        if pybass.BASS_StreamCreateFile(False, os.path.dirname(os.path.abspath(__file__)) + "\\bass\\file".replace("\\", "\\\\"), 0, 0, pybass.BASS_UNICODE | pybass.BASS_STREAM_PRESCAN | pybass.BASS_STREAM_DECODE): return True
-        if self.__positionTmp[id] == None: _memory[id][M_VALUE] = True
-        else: _memory[id][M_VALUE] = False
+        h = pybass.BASS_StreamCreateFile(False, os.path.dirname(os.path.abspath(__file__)) + "\\bass\\file".replace("\\", "\\\\"), 0, 0, pybass.BASS_UNICODE | pybass.BASS_STREAM_PRESCAN | pybass.BASS_STREAM_DECODE)
+        if h: return True
+        else: return False
