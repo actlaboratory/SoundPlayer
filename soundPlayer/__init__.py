@@ -1,7 +1,7 @@
 from . import *
 
 __copyright__    = 'Copyright (C) 2020-2021 Hiroki Fujii'
-__version__      = '0.3.0'
+__version__      = '0.3.1'
 __license__      = 'MIT'
 __author__       = 'Hiroki Fujii'
 __author_email__ = 'hfujii@hisystron.com'
