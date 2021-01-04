@@ -625,4 +625,5 @@ class bassThread(threading.Thread):
         return True
 
     def isDeviceOk(self, id):
-        return pybass.BASS_SetDevice(self.__device[id])
+        _memory[id][M_VALUE] = pybass.BASS_SetDevice(self.__device[id])
+        return True
