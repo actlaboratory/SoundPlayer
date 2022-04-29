@@ -47,6 +47,10 @@ def connectPlayer(playerObject):
     _send(index, PLAYER_SEND_NEWPLAYER)
     return index
 
+def setProxy(proxyString):
+    # プロキシ設定（user:pass@address:port） => bool
+    return pybass.BASS_SetConfigPtr(pybass.BASS_CONFIG_NET_PROXY, proxyString)
+
 def getDeviceList():
     """
     デバイスリストを取得 => list

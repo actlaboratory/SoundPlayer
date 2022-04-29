@@ -6,6 +6,12 @@ def getDeviceList():
     """ デバイス一覧取得 => list """
     return bassController.getDeviceList()
 
+def setProxy(proxyString):
+    """
+    user:pass@server:port => bool
+    """
+    return bassController.setProxy(proxyString)
+
 class player():
     def __init__(self, device=PLAYER_DEFAULT_SPEAKER):
         # init（初期再生デバイス=デフォルト）
