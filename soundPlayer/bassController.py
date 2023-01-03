@@ -375,7 +375,7 @@ class bassThread(threading.Thread):
                     self.__positionTmp[id] = None
                 elif a == pybass.BASS_ACTIVE_PAUSED_DEVICE: 
                     self.__changeDevice(id)
-                elif a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] == self.PLAYINGF_PLAY and self.__sourceType[id] == PLAYER_SOURCETYPE_STREAM):
+                elif (a == pybass.BASS_ACTIVE_STALLED and self.__sourceType[id] == PLAYER_SOURCETYPE_STREAM) or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] == self.PLAYINGF_PLAY and self.__sourceType[id] == PLAYER_SOURCETYPE_STREAM):
                     if not self.play(id):
                         if pybass.BASS_ErrorGetCode() != pybass.BASS_ERROR_HANDLE: #ハンドルが姿を消しているのでデバイスエラー
                             self.stop(id)
