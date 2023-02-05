@@ -96,7 +96,7 @@ class player():
     def __sendSource(self):
         """bassにファイルを送信 => bool"""
         if os.path.isfile(self.__source): return bassController.setFile(self.__id)
-        elif re.search("^https?://.+\..+/.*$", self.__source) != None: return bassController.setURL(self.__id)
+        elif re.search("^https?://.+\..+/.*(\n.+)*$", self.__source) != None: return bassController.setURL(self.__id)
         else: return False
 
     def isDeviceOk(self):
