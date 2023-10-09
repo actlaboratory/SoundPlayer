@@ -246,7 +246,7 @@ class player():
                     self.__overRewind = False
                     if counter < 4000: counter += 1
                 else:
-                    if direction == -1and not self.setPosition(pos):
+                    if direction == -1 and not self.setPosition(pos):
                         self.setPosition(0)
                         self.__overRewind = True
                     elif direction == 1:

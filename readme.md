@@ -14,10 +14,13 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.3.1.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.5.2.zip
 
 
 ## 変更履歴
+
+- Version 0.5.2 2023.10.09
+	- Python3.11での使用に対応
 
 - Version 0.5.1 2023.02.05
 	- URL指定に改行コードが含まれていると正しく動作しない問題を修正（2行目以降はHTTPヘッダー）
