@@ -203,7 +203,7 @@ class player():
         """
         # フラグ = -2 巻き戻し - 待機処理 - 終了 - 待機処理 - 早送り +2
         if (self.getStatus() != PLAYER_STATUS_PLAYING and self.getStatus() != PLAYER_STATUS_OVERREWIND) or self.getLength() == False: return
-        if self.__fastMoveFlag == 0 and not self.__fastMoveThread.isAlive():
+        if self.__fastMoveFlag == 0 and not self.__fastMoveThread.is_alive():
             self.__fastMoveThread = threading.Thread(target=self.__fastMover, args=(direction,))
             self.__fastMoveThread.start()
         elif self.__fastMoveFlag == direction: self.__fastMoveFlag = direction * 2

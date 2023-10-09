@@ -31,7 +31,7 @@ def connectPlayer(playerObject):
     global _playerThread
     global _playerList
     global _memory
-    if _playerThread == None or _playerThread.isAlive() == False: # bassスレッド再生成
+    if _playerThread == None or _playerThread.is_alive() == False: # bassスレッド再生成
         _playerList = []
         _memory = []
         _playerThread = bassThread()
