@@ -14,10 +14,13 @@ https://www.un4seen.com/
 
 ## インストール
 
-- pip install https://github.com/actlaboratory/soundPlayer/archive/0.5.2.zip
+- pip install https://github.com/actlaboratory/soundPlayer/archive/0.5.4.zip
 
 
 ## 変更履歴
+
+- Version 0.5.4 2023.11.05
+	- 不要ファイル削除に伴うpyinstaller使用時の不具合を修正
 
 - Version 0.5.3 2023.10.09
 	- Python3.11への対応漏れを修正
